@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>¡Feliz Cumpleaños, Hermano!</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <style>
+      body {
+        margin: 0;
+        padding: 20px;
+        font-family: "Arial", sans-serif;
+        background: linear-gradient(135deg, #004d98, #a50044);
+        background-size: 400% 400%;
+        animation: gradientBG 10s ease infinite;
+        color: #fff;
+        text-align: center;
+        overflow: hidden;
+      }
+
+      @keyframes gradientBG {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      h1 {
+        font-size: 3em;
+        margin-bottom: 20px;
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+        animation: textPulse 2s infinite;
+      }
+
+      @keyframes textPulse {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.1);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      /* From Uiverse.io by vinodjangid07 */
+      .reward-btn {
+        box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+        width: 350px;
+        height: 70px;
+        background-color: #101218;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s;
+        margin: 0 auto;
+        gap: 0;
+      }
+      .IconContainer {
+        width: 100px;
+        height: 40px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+      }
+      .IconContainer svg {
+        width: 40%;
+        z-index: 3;
+      }
+      .box-top {
+        transition: all 0.3s;
+      }
+      .text {
+        width: max-content;
+        height: 100%;
+        font-size: 1.2em;
+        color: #6a8ef6;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        font-weight: 600;
+      }
+      .reward-btn:hover .IconContainer .box-top {
+        transform: translateY(-5px);
+      }
+      .reward-btn:hover {
+        background-color: #202531;
+      }
+      .reward-btn:hover .coin {
+        transform: translateY(-5px);
+        transition-delay: 0.2s;
+      }
+      .coin {
+        width: 15%;
+        height: 25%;
+        background-color: #e4d61a;
+        position: absolute;
+        border-radius: 50%;
+        transition: all 0.3s;
+        z-index: 1;
+        border: 2px solid #ffe956;
+        margin-top: 4px;
+      }
+      .IconContainer,
+      .IconContainer svg,
+      .text {
+        margin: 0;
+        padding: 0;
+        line-height: 1;
+      }
+      /* Contenedor del video, inicialmente oculto */
+      #videoContainer {
+        display: none;
+        margin: 30px auto;
+        max-width: 960px;
+        animation: videoFadeIn 1.5s ease forwards;
+      }
+
+      @keyframes videoFadeIn {
+        from {
+          opacity: 0;
+          transform: scale(0.8);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      video {
+        width: 100%;
+        height: auto;
+        max-height: 500px;
+        border: 5px solid #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        cursor: pointer;
+      }
+      /* From Uiverse.io by youranonone10 */
+      .holder {
+        margin: 4rem auto 0;
+        width: 150px;
+        height: 400px;
+        position: relative;
+      }
+
+      .holder *,
+      .holder *:before,
+      .holder *:after {
+        position: absolute;
+        content: "";
+      }
+
+      .candle {
+        bottom: 0;
+        width: 150px;
+        height: 300px;
+        border-radius: 150px / 40px;
+        -webkit-box-shadow: inset 20px -30px 50px 0 rgba(0, 0, 0, 0.4),
+          inset -20px 0 50px 0 rgba(0, 0, 0, 0.4);
+        box-shadow: inset 20px -30px 50px 0 rgba(0, 0, 0, 0.4),
+          inset -20px 0 50px 0 rgba(0, 0, 0, 0.4);
+        background: #190f02;
+        background: -webkit-gradient(
+          linear,
+          left top,
+          left bottom,
+          from(#e48825),
+          color-stop(#e78e0e),
+          color-stop(#833c03),
+          color-stop(50%, #4c1a03),
+          to(#1c0900)
+        );
+        background: linear-gradient(#e48825, #e78e0e, #833c03, #4c1a03 50%, #1c0900);
+      }
+
+      .candle:before {
+        width: 100%;
+        height: 40px;
+        border-radius: 50%;
+        border: 2px solid #d47401;
+        background: #b86409;
+        background: radial-gradient(#ffef80, #b86409 60%);
+        background: radial-gradient(#eaa121, #8e4901 45%, #b86409 80%);
+      }
+
+      .candle:after {
+        width: 34px;
+        height: 10px;
+        left: 50%;
+        -webkit-transform: translateX(-50%);
+        -ms-transform: translateX(-50%);
+        transform: translateX(-50%);
+        border-radius: 50%;
+        top: 14px;
+        -webkit-box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.5);
+        box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.5);
+        background: radial-gradient(rgba(0, 0, 0, 0.6), transparent 45%);
+      }
+
+      .thread {
+        width: 6px;
+        height: 36px;
+        top: -17px;
+        left: 50%;
+        z-index: 1;
+        border-radius: 40% 40% 0 0;
+        -webkit-transform: translateX(-50%);
+        -ms-transform: translateX(-50%);
+        transform: translateX(-50%);
+        background: #121212;
+        background: -webkit-gradient(
+          linear,
+          left top,
+          left bottom,
+          from(#d6994a),
+          color-stop(#4b232c),
+          color-stop(#121212),
+          color-stop(black),
+          color-stop(90%, #e8bb31)
+        );
+        background: linear-gradient(#d6994a, #4b232c, #121212, black, #e8bb31 90%);
+      }
+
+      .flame {
+        width: 24px;
+        height: 120px;
+        left: 50%;
+        -webkit-transform-origin: 50% 100%;
+        -ms-transform-origin: 50% 100%;
+        transform-origin: 50% 100%;
+        -webkit-transform: translateX(-50%);
+        -ms-transform: translateX(-50%);
+        transform: translateX(-50%);
+        bottom: 100%;
+        border-radius: 50% 50% 20% 20%;
+        background: rgba(255, 255, 255, 1);
+        background: -webkit-gradient(
+          linear,
+          left top,
+          left bottom,
+          color-stop(80%, white),
+          to(transparent)
+        );
+        background: linear-gradient(white 80%, transparent);
+        -webkit-animation: moveFlame 6s linear infinite, enlargeFlame 5s linear infinite;
+        animation: moveFlame 6s linear infinite, enlargeFlame 5s linear infinite;
+      }
+
+      .flame:before {
+        width: 100%;
+        height: 100%;
+        border-radius: 50% 50% 20% 20%;
+        -webkit-box-shadow: 0 0 15px 0 rgba(247, 93, 0, 0.4),
+          0 -6px 4px 0 rgba(247, 128, 0, 0.7);
+        box-shadow: 0 0 15px 0 rgba(247, 93, 0, 0.4), 0 -6px 4px 0 rgba(247, 128, 0, 0.7);
+      }
+
+      @-webkit-keyframes moveFlame {
+        0%,
+        100% {
+          -webkit-transform: translateX(-50%) rotate(-2deg);
+          transform: translateX(-50%) rotate(-2deg);
+        }
+
+        50% {
+          -webkit-transform: translateX(-50%) rotate(2deg);
+          transform: translateX(-50%) rotate(2deg);
+        }
+      }
+
+      @keyframes moveFlame {
+        0%,
+        100% {
+          -webkit-transform: translateX(-50%) rotate(-2deg);
+          transform: translateX(-50%) rotate(-2deg);
+        }
+
+        50% {
+          -webkit-transform: translateX(-50%) rotate(2deg);
+          transform: translateX(-50%) rotate(2deg);
+        }
+      }
+
+      @-webkit-keyframes enlargeFlame {
+        0%,
+        100% {
+          height: 120px;
+        }
+
+        50% {
+          height: 140px;
+        }
+      }
+
+      @keyframes enlargeFlame {
+        0%,
+        100% {
+          height: 120px;
+        }
+
+        50% {
+          height: 140px;
+        }
+      }
+
+      .glow {
+        width: 26px;
+        height: 60px;
+        border-radius: 50% 50% 35% 35%;
+        left: 50%;
+        top: -48px;
+        -webkit-transform: translateX(-50%);
+        -ms-transform: translateX(-50%);
+        transform: translateX(-50%);
+        background: rgba(0, 133, 255, 0.7);
+        -webkit-box-shadow: 0 -40px 30px 0 #dc8a0c, 0 40px 50px 0 #dc8a0c,
+          inset 3px 0 2px 0 rgba(0, 133, 255, 0.6),
+          inset -3px 0 2px 0 rgba(0, 133, 255, 0.6);
+        box-shadow: 0 -40px 30px 0 #dc8a0c, 0 40px 50px 0 #dc8a0c,
+          inset 3px 0 2px 0 rgba(0, 133, 255, 0.6),
+          inset -3px 0 2px 0 rgba(0, 133, 255, 0.6);
+      }
+
+      .glow:before {
+        width: 70%;
+        height: 60%;
+        left: 50%;
+        -webkit-transform: translateX(-50%);
+        -ms-transform: translateX(-50%);
+        transform: translateX(-50%);
+        bottom: 0;
+        border-radius: 50%;
+        background: rgba(0, 0, 0, 0.35);
+      }
+
+      .blinking-glow {
+        width: 100px;
+        height: 180px;
+        left: 50%;
+        top: -55%;
+        -webkit-transform: translateX(-50%);
+        -ms-transform: translateX(-50%);
+        transform: translateX(-50%);
+        border-radius: 50%;
+        background: #ff6000;
+        -webkit-filter: blur(50px);
+        -moz-filter: blur(60px);
+        -o-filter: blur(60px);
+        -ms-filter: blur(60px);
+        filter: blur(60px);
+        -webkit-animation: blinkIt 0.1s infinite;
+        animation: blinkIt 0.1s infinite;
+      }
+      /* From Uiverse.io by f754699 */
+      .loader{
+        margin-block: 1rem;
+      }
+      .glitch {
+        position: relative;
+        font-size: 2.5rem;
+        font-weight: 700;
+        line-height: 1.2;
+        color: #fff;
+        letter-spacing: 5px;
+        z-index: 1;
+        animation: shift 1s ease-in-out infinite alternate;
+      }
+
+      .glitch:before,
+      .glitch:after {
+        display: block;
+        content: attr(data-glitch);
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 0.8;
+      }
+
+      .glitch:before {
+        animation: glitch 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite;
+        color: black;
+        z-index: -1;
+      }
+
+      .glitch:after {
+        animation: glitch 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) reverse both infinite;
+        color: rgb(121, 82, 152);
+        z-index: -2;
+      }
+
+      @keyframes glitch {
+        0% {
+          transform: translate(0);
+        }
+
+        20% {
+          transform: translate(-3px, 3px);
+        }
+
+        40% {
+          transform: translate(-3px, -3px);
+        }
+
+        60% {
+          transform: translate(3px, 3px);
+        }
+
+        80% {
+          transform: translate(3px, -3px);
+        }
+
+        to {
+          transform: translate(0);
+        }
+      }
+
+      @keyframes shift {
+        0%,
+        40%,
+        44%,
+        58%,
+        61%,
+        65%,
+        69%,
+        73%,
+        100% {
+          transform: skewX(0deg);
+        }
+
+        41% {
+          transform: skewX(10deg);
+        }
+
+        42% {
+          transform: skewX(-10deg);
+        }
+
+        59% {
+          transform: skewX(40deg) skewY(10deg);
+        }
+
+        60% {
+          transform: skewX(-40deg) skewY(-10deg);
+        }
+
+        63% {
+          transform: skewX(10deg) skewY(-5deg);
+        }
+
+        70% {
+          transform: skewX(-50deg) skewY(-20deg);
+        }
+
+        71% {
+          transform: skewX(10deg) skewY(-10deg);
+        }
+      }
+
+      #confetti-canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 999;
+      }
+
+      @media (max-width: 768px) {
+        body {
+          padding: 10px;
+        }
+        h1 {
+          font-size: 2.5em;
+        }
+        .reward-btn {
+          width: 300px;
+          height: 70px;
+        }
+        video {
+          width: 100%;
+          height: auto;
+          max-height: 500px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- From Uiverse.io by andrew-demchenk0 -->
+    <div class="loader">
+      <div data-glitch="!feliz cumpleaños Chelo!" class="glitch h1-cumple">!feliz cumpleaños Chelo!</div>
+    </div>
+    <!-- From Uiverse.io by vinodjangid07 -->
+    <button class="reward-btn" id="celebrateBtn">
+      <span class="IconContainer">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 60 20"
+          class="box-top box"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-width="4"
+            stroke="#6A8EF6"
+            d="M2 18L58 18"
+          ></path>
+          <circle
+            stroke-width="5"
+            stroke="#6A8EF6"
+            fill="#101218"
+            r="7"
+            cy="9.5"
+            cx="20.5"
+          ></circle>
+          <circle
+            stroke-width="5"
+            stroke="#6A8EF6"
+            fill="#101218"
+            r="7"
+            cy="9.5"
+            cx="38.5"
+          ></circle>
+        </svg>
+
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 58 44"
+          class="box-body box"
+        >
+          <mask fill="white" id="path-1-inside-1_81_19">
+            <rect rx="3" height="44" width="58"></rect>
+          </mask>
+          <rect
+            mask="url(#path-1-inside-1_81_19)"
+            stroke-width="8"
+            stroke="#6A8EF6"
+            fill="#101218"
+            rx="3"
+            height="44"
+            width="58"
+          ></rect>
+          <line
+            stroke-width="6"
+            stroke="#6A8EF6"
+            y2="29"
+            x2="58"
+            y1="29"
+            x1="-3.61529e-09"
+          ></line>
+          <path
+            stroke-linecap="round"
+            stroke-width="5"
+            stroke="#6A8EF6"
+            d="M45.0005 20L36 3"
+          ></path>
+          <path
+            stroke-linecap="round"
+            stroke-width="5"
+            stroke="#6A8EF6"
+            d="M21 3L13.0002 19.9992"
+          ></path>
+        </svg>
+
+        <span class="coin"></span>
+      </span>
+      <span class="text">!Clic para ver tu regalo!</span>
+    </button>
+
+    <div class="holder">
+      <div class="candle">
+        <div class="blinking-glow"></div>
+        <div class="thread"></div>
+        <div class="glow"></div>
+        <div class="flame"></div>
+      </div>
+    </div>
+
+    <!-- Audio de feliz cumpleaños -->
+    <audio
+      id="birthdayAudio"
+      src="assets/audio/feliz-cumpleanos-feliz-.mp3"
+      type="audio/mpe3"
+      preload="auto"
+    ></audio>
+
+    <!-- Contenedor del video -->
+    <div id="videoContainer">
+      <video
+        id="celebrationVideo"
+        src="assets/video/chelo-cumple1.mp4"
+        type="video/mp4"
+        playsinline
+      ></video>
+    </div>
+
+    <!-- Canvas para el confeti -->
+    <canvas id="confetti-canvas"></canvas>
+
+    <script>
+      // Al cargar la página se lanza confeti y se reproduce el audio
+      const audio = document.getElementById("birthdayAudio");
+      window.addEventListener("load", () => {
+        launchConfetti();
+        audio.currentTime = 0;
+        audio.play();
+      });
+
+      const btn = document.getElementById("celebrateBtn");
+      const videoContainer = document.getElementById("videoContainer");
+      const video = document.getElementById("celebrationVideo");
+      const h1 = document.querySelector(".h1-cumple");
+      const vela = document.querySelector(".holder");
+      btn.addEventListener("click", () => {
+        // Parar el audio de cumpleaños
+        audio.pause();
+        audio.currentTime = 0;
+
+        // Mostrar el contenedor del video y reproducirlo
+        videoContainer.style.display = "block";
+        video.play();
+
+        // Deshabilitar el botón para evitar repeticiones
+        h1.style.fontSize = "1.5rem";
+        vela.style.display = "none";
+        btn.style.display = "none";
+      });
+
+      // Al hacer clic en el video se solicita pantalla completa
+      video.addEventListener("click", () => {
+        if (video.requestFullscreen) {
+          video.requestFullscreen();
+        } else if (video.webkitRequestFullscreen) {
+          video.webkitRequestFullscreen();
+        } else if (video.msRequestFullscreen) {
+          video.msRequestFullscreen();
+        }
+      });
+
+      function launchConfetti() {
+        const myConfetti = confetti.create(document.getElementById("confetti-canvas"), {
+          resize: true,
+          useWorker: true,
+        });
+        const duration = 3000;
+        const end = Date.now() + duration;
+
+        (function frame() {
+          myConfetti({
+            particleCount: 7,
+            angle: 60,
+            spread: 55,
+            origin: { x: 0 },
+          });
+          myConfetti({
+            particleCount: 7,
+            angle: 120,
+            spread: 55,
+            origin: { x: 1 },
+          });
+
+          if (Date.now() < end) {
+            requestAnimationFrame(frame);
+          }
+        })();
+      }
+    </script>
+  </body>
+</html>
